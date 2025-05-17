@@ -9,12 +9,19 @@
 <body>
 <header>
     <h1>Управление клиентами</h1>
+
+    <!-- 🔹 Форма фильтрации -->
+    <form th:action="@{/admin/clients}" method="get">
+        <input type="text" name="name" placeholder="Имя" th:value="${param.name}">
+        <input type="text" name="email" placeholder="Email" th:value="${param.email}">
+
+
+        <button type="submit">Поиск</button>
+    </form>
+
     <nav>
         <ul>
-            <li><a href="/admin">Главная</a></li>
-            <li><a href="/admin/dishes">Блюда</a></li>
-            <li><a href="/admin/tables">Таблицы</a></li>
-            <!-- Добавить другие ссылки для перехода между страницами -->
+            <li><a href="/admin/adminMain">Главная</a></li>
         </ul>
     </nav>
 </header>
