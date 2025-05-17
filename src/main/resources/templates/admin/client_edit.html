@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование клиента</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Редактирование клиента</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin">Главная</a></li>
+            <li><a href="/admin/dishes">Блюда</a></li>
+            <li><a href="/admin/tables">Таблицы</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Форма редактирования клиента -->
+<h2>Редактировать информацию о клиенте</h2>
+<form action="#" th:action="@{/admin/clients/{id}/update(id=${client.id})}" th:object="${client}" method="post">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <label for="mail">Email:</label>
+    <input type="email" id="mail" th:field="*{mail}" required>
+
+    <label for="telephone">Телефон:</label>
+    <input type="text" id="telephone" th:field="*{telephone}" required>
+
+    <label for="discount">Скидка:</label>
+    <input type="number" id="discount" th:field="*{discount}" step="0.01" min="0" max="100" required>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+
+</body>
+</html>

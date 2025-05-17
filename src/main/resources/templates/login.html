@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Вход</title>
+    <script>
+        function togglePasswordField() {
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const passwordField = document.getElementById("adminPasswordField");
+            passwordField.style.display = role === 'admin' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h1>Выберите роль для входа</h1>
+
+    <form th:action="@{/login}" method="post">
+        <input type="radio" name="role" value="client" checked onclick="togglePasswordField()"> Клиент<br>
+        <input type="radio" name="role" value="admin" onclick="togglePasswordField()"> Администратор<br><br>
+
+        <div id="adminPasswordField" style="display:none;">
+            <label>Пароль администратора:</label><br>
+            <input type="password" name="adminPassword"><br><br>
+        </div>
+
+        <button type="submit">Войти</button>
+    </form>
+
+    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+</body>
+</html>

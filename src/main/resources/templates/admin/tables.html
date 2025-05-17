@@ -1,0 +1,16 @@
+<!-- admin/tables.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Столики</title></head>
+<body>
+<h2>Список столиков</h2>
+<table border="1">
+    <tr><th>ID</th><th>Вместимость</th><th>Зона</th></tr>
+    <tr th:each="table : ${tables}">
+        <td th:text="${table.id}"></td>
+        <td th:text="${table.capacity}"></td>
+        <td th:text="${table.zone}"></td>
+    </tr>
+</table>
+</body>
+</html>

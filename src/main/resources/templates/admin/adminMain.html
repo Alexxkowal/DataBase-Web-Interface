@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Административная панель</h1>
+
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/clients}">Клиенты</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/staff}">Сотрудники</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/tables}">Столики</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/reservations}">Бронирования</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/orders}">Заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/orderDetails}">Состав заказов</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/dishes}">Блюда</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/compound}">Состав блюд</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/products}">Продукты</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/dishCategory}">Категории блюд</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/productSummary}">Сводка по продуктам</a>
+        </li>
+    </ul>
+
+    <div class="alert alert-info">
+        Выберите вкладку для управления соответствующей таблицей.
+    </div>
+</div>
+</body>
+</html>

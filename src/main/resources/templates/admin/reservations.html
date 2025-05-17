@@ -1,0 +1,18 @@
+<!-- admin/reservations.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Бронирования</title></head>
+<body>
+<h2>Список бронирований</h2>
+<table border="1">
+    <tr><th>ID</th><th>ID Стола</th><th>ID Клиента</th><th>Дата</th><th>Время</th></tr>
+    <tr th:each="res : ${reservations}">
+        <td th:text="${res.id}"></td>
+        <td th:text="${res.tableId}"></td>
+        <td th:text="${res.clientId}"></td>
+        <td th:text="${res.reservationDate}"></td>
+        <td th:text="${res.reservationTime}"></td>
+    </tr>
+</table>
+</body>
+</html>

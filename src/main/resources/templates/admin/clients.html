@@ -1,0 +1,73 @@
+<!-- admin/clients.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Управление клиентами</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin">Главная</a></li>
+            <li><a href="/admin/dishes">Блюда</a></li>
+            <li><a href="/admin/tables">Таблицы</a></li>
+            <!-- Добавить другие ссылки для перехода между страницами -->
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список клиентов</h2>
+
+    <!-- Таблица с клиентами -->
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Почта</th>
+            <th>Телефон</th>
+            <th>Скидка</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Здесь Thymeleaf вставит данные из модели -->
+        <tr th:each="client : ${clients}">
+            <td th:text="${client.id}"></td>
+            <td th:text="${client.name}"></td>
+            <td th:text="${client.mail}"></td>
+            <td th:text="${client.telephone}"></td>
+            <td th:text="${client.discount}"></td>
+            <td>
+                <!-- Кнопки редактирования и удаления -->
+                <a th:href="@{/admin/clients/{id}/edit(id=${client.id})}">Редактировать</a>
+                <a th:href="@{/admin/clients/{id}/delete(id=${client.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Форма для добавления нового клиента -->
+    <h3>Добавить нового клиента</h3>
+    <form action="/admin/clients/add" method="post">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="mail">Почта:</label>
+        <input type="email" id="mail" name="mail" required>
+
+        <label for="telephone">Телефон:</label>
+        <input type="text" id="telephone" name="telephone" required>
+
+        <label for="discount">Скидка:</label>
+        <input type="number" id="discount" name="discount" required>
+
+        <button type="submit">Добавить клиента</button>
+    </form>
+</section>
+</body>
+</html>
