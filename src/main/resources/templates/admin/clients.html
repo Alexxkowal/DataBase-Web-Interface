@@ -14,10 +14,12 @@
     <form th:action="@{/admin/clients}" method="get">
         <input type="text" name="name" placeholder="Имя" th:value="${param.name}">
         <input type="text" name="email" placeholder="Email" th:value="${param.email}">
-
+        <input type="number" name="minDiscount" placeholder="Мин. скидка" step="0.01" th:value="${param.minDiscount}">
+        <input type="number" name="maxDiscount" placeholder="Макс. скидка" step="0.01" th:value="${param.maxDiscount}">
 
         <button type="submit">Поиск</button>
     </form>
+
 
     <nav>
         <ul>
@@ -43,7 +45,7 @@
         </thead>
         <tbody>
         <!-- Здесь Thymeleaf вставит данные из модели -->
-        <tr th:each="client : ${clients}">
+        <tr th:each="client : ${clients.content}">
             <td th:text="${client.id}"></td>
             <td th:text="${client.name}"></td>
             <td th:text="${client.mail}"></td>
@@ -76,5 +78,15 @@
         <button type="submit">Добавить клиента</button>
     </form>
 </section>
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/clients(page=${currentPage - 1}, name=${param.name}, email=${param.email}, minDiscount=${param.minDiscount}, maxDiscount=${param.maxDiscount})}">Назад</a>
+
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/clients(page=${currentPage + 1}, name=${param.name}, email=${param.email}, minDiscount=${param.minDiscount}, maxDiscount=${param.maxDiscount})}">Вперёд</a>
+    </div>
+</div>
 </body>
 </html>

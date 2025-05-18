@@ -3,10 +3,13 @@ package com.databaseinterface.restaurant.controller;
 import com.databaseinterface.restaurant.model.Client;
 import com.databaseinterface.restaurant.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import com.databaseinterface.restaurant.service.*;
 
 @Controller
@@ -25,10 +28,15 @@ public class ClientController {
     public String listClients(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
-            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) Double minDiscount,
+            @RequestParam(required = false) Double maxDiscount,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
-        List<Client> clients = clientService.findClients(name, email, gender);
+        Page<Client> clients = clientService.findClients(name, email, minDiscount, maxDiscount, page, size);
         model.addAttribute("clients", clients);
+        model.addAttribute("totalPages", clients.getTotalPages());
+    model.addAttribute("currentPage", page);
         return "admin/clients";
     }
 

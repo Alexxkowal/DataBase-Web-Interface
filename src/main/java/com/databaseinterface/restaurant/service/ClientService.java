@@ -5,8 +5,10 @@ import com.databaseinterface.restaurant.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ClientService {
@@ -14,10 +16,9 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public List<Client> findClients(String name, String email, String gender) {
-        return clientRepository.findAll().stream()
-            .filter(c -> name == null || c.getName().toLowerCase().contains(name.toLowerCase()))
-            .filter(c -> email == null || c.getMail().toLowerCase().contains(email.toLowerCase()))
-            .collect(Collectors.toList());
+    public Page<Client> findClients(String name, String email, Double minDiscount, Double maxDiscount, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return clientRepository.searchClients(name, email, minDiscount, maxDiscount, pageable);
     }
 }
+
