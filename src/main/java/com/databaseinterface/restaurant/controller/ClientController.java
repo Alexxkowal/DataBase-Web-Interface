@@ -42,8 +42,8 @@ public class ClientController {
 
     @PostMapping("/add")
     public String addClient(Client client) {
-        clientRepository.save(client);  // Сохраняем клиента в базе данных
-        return "redirect:/admin/clients";  // Перенаправление на страницу с клиентами
+        clientRepository.save(client);
+        return "redirect:/admin/clients";
     }
 
     @GetMapping("/{id}/edit")
@@ -51,7 +51,7 @@ public class ClientController {
         Client client = clientRepository.findById(id).orElse(null);
         if (client != null) {
             model.addAttribute("client", client);
-            return "admin/client_edit"; // Шаблон для редактирования клиента
+            return "admin/client_edit";
         } else {
             return "redirect:/admin/clients";
         }
@@ -59,8 +59,8 @@ public class ClientController {
 
     @GetMapping("/{id}/delete")
     public String deleteClient(@PathVariable("id") int id) {
-        clientRepository.deleteById(id);  // Удаляем клиента по ID
-        return "redirect:/admin/clients";  // Перенаправляем обратно на список клиентов
+        clientRepository.deleteById(id);
+        return "redirect:/admin/clients";
     }
 
     @PostMapping("/{id}/update")
