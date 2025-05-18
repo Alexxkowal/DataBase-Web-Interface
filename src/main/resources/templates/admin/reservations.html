@@ -1,18 +1,81 @@
-<!-- admin/reservations.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Бронирования</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Бронирования</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 <body>
-<h2>Список бронирований</h2>
-<table border="1">
-    <tr><th>ID</th><th>ID Стола</th><th>ID Клиента</th><th>Дата</th><th>Время</th></tr>
-    <tr th:each="res : ${reservations}">
-        <td th:text="${res.id}"></td>
-        <td th:text="${res.tableId}"></td>
-        <td th:text="${res.clientId}"></td>
-        <td th:text="${res.reservationDate}"></td>
-        <td th:text="${res.reservationTime}"></td>
-    </tr>
-</table>
+<header>
+    <h1>Управление бронированиями</h1>
+    <form th:action="@{/admin/reservations}" method="get">
+        <input type="text" name="clientName" placeholder="Имя клиента" th:value="${param.clientName}">
+        <input type="date" name="date" th:value="${param.date}" pattern="yyyy-MM-dd">
+        <input type="number" name="tableId" placeholder="Номер стола" th:value="${param.tableId}">
+        <button type="submit">Поиск</button>
+    </form>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список бронирований</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Клиент</th>
+            <th>Стол</th>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reservations.content}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.client.name}"></td>
+            <td th:text="${r.table.id}"></td>
+            <td th:text="${r.reservationDate}"></td>
+            <td th:text="${r.reservationTime}"></td>
+            <td>
+                <a th:href="@{/admin/reservations/{id}/edit(id=${r.id})}">Редактировать</a>
+                <a th:href="@{/admin/reservations/{id}/delete(id=${r.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Добавить бронирование</h3>
+    <form action="/admin/reservations/add" method="post">
+        <label for="clientId">Клиент:</label>
+        <input type="number" id="clientId" name="client.id" required>
+
+        <label for="tableId">Стол:</label>
+        <input type="number" id="tableId" name="table.id" required>
+
+        <label for="date">Дата:</label>
+        <input type="date" id="date" name="reservationDate" required>
+
+        <label for="time">Время:</label>
+        <input type="time" id="time" name="reservationTime" required>
+
+        <button type="submit">Добавить</button>
+    </form>
+</section>
+
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/reservations(page=${currentPage - 1}, clientName=${param.clientName}, date=${param.date}, tableId=${param.tableId})}">Назад</a>
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/reservations(page=${currentPage + 1}, clientName=${param.clientName}, date=${param.date}, tableId=${param.tableId})}">Вперёд</a>
+    </div>
+</div>
+
 </body>
 </html>

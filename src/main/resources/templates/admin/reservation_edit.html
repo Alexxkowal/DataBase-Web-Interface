@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование бронирования</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Редактирование бронирования</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/reservations">Бронирования</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h2>Редактировать бронирование</h2>
+<form th:action="@{/admin/reservations/{id}/update(id=${reservation.id})}" th:object="${reservation}" method="post">
+    <label for="clientId">Клиент:</label>
+    <input type="number" id="clientId" th:field="*{client.id}" required>
+
+    <label for="tableId">Стол:</label>
+    <input type="number" id="tableId" th:field="*{table.id}" required>
+
+    <label for="reservationDate">Дата:</label>
+    <input type="date" id="reservationDate" th:field="*{reservationDate}" required>
+
+    <label for="reservationTime">Время:</label>
+    <input type="time" id="reservationTime" th:field="*{reservationTime}" required>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+</body>
+</html>
