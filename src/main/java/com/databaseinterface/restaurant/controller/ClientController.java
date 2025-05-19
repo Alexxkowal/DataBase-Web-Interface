@@ -25,20 +25,23 @@ public class ClientController {
     }
 
     @GetMapping
-    public String listClients(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) Double minDiscount,
-            @RequestParam(required = false) Double maxDiscount,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            Model model) {
-        Page<Client> clients = clientService.findClients(name, email, minDiscount, maxDiscount, page, size);
-        model.addAttribute("clients", clients);
-        model.addAttribute("totalPages", clients.getTotalPages());
+public String listClients(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String email,
+        @RequestParam(required = false) Double minDiscount,
+        @RequestParam(required = false) Double maxDiscount,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        Model model) {
+    Page<Client> clients = clientService.findClients(name, email, minDiscount, maxDiscount, page, size);
+    model.addAttribute("clients", clients);
+    model.addAttribute("totalPages", clients.getTotalPages());
     model.addAttribute("currentPage", page);
-        return "admin/clients";
-    }
+
+    model.addAttribute("newClient", new Client());
+
+    return "admin/clients";
+}
 
     @PostMapping("/add")
     public String addClient(Client client) {

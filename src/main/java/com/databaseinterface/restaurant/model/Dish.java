@@ -33,7 +33,7 @@ public class Dish {
         this.id = id;
     }
 
-    public String getDishName() {
+    public String getName() {
         return dishName;
     }
 

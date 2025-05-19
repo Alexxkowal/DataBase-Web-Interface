@@ -1,92 +1,69 @@
-<!-- admin/clients.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Клиенты</title>
+    <title>Управление клиентами</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <header>
-    <h1>Управление клиентами</h1>
-
-    <!-- 🔹 Форма фильтрации -->
-    <form th:action="@{/admin/clients}" method="get">
-        <input type="text" name="name" placeholder="Имя" th:value="${param.name}">
-        <input type="text" name="email" placeholder="Email" th:value="${param.email}">
-        <input type="number" name="minDiscount" placeholder="Мин. скидка" step="0.01" th:value="${param.minDiscount}">
-        <input type="number" name="maxDiscount" placeholder="Макс. скидка" step="0.01" th:value="${param.maxDiscount}">
-
-        <button type="submit">Поиск</button>
-    </form>
-
-
+    <h1>Список клиентов</h1>
     <nav>
         <ul>
             <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/clients">Клиенты</a></li>
         </ul>
     </nav>
 </header>
 
 <section>
-    <h2>Список клиентов</h2>
-
-    <!-- Таблица с клиентами -->
     <table border="1">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Имя</th>
-            <th>Почта</th>
-            <th>Телефон</th>
-            <th>Скидка</th>
-            <th>Действия</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Почта</th>
+                <th>Скидка</th>
+                <th>Действия</th>
+            </tr>
         </thead>
         <tbody>
-        <!-- Здесь Thymeleaf вставит данные из модели -->
-        <tr th:each="client : ${clients.content}">
-            <td th:text="${client.id}"></td>
-            <td th:text="${client.name}"></td>
-            <td th:text="${client.mail}"></td>
-            <td th:text="${client.telephone}"></td>
-            <td th:text="${client.discount}"></td>
-            <td>
-                <!-- Кнопки редактирования и удаления -->
-                <a th:href="@{/admin/clients/{id}/edit(id=${client.id})}">Редактировать</a>
-                <a th:href="@{/admin/clients/{id}/delete(id=${client.id})}">Удалить</a>
-            </td>
-        </tr>
+            <tr th:each="client : ${clients.content}">
+                <td th:text="${client.id}"></td>
+                <td th:text="${client.name}"></td>
+                <td th:text="${client.mail}"></td>
+                <td th:text="${client.discount}"></td>
+                <td>
+                    <a th:href="@{/admin/clients/{id}/edit(id=${client.id})}">Редактировать</a>
+                    <a th:href="@{/admin/clients/{id}/delete(id=${client.id})}"
+                       onclick="return confirm('Вы уверены, что хотите удалить?');">Удалить</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 
-    <!-- Форма для добавления нового клиента -->
     <h3>Добавить нового клиента</h3>
-    <form action="/admin/clients/add" method="post">
+    <form th:action="@{/admin/clients/add}" method="post" th:object="${newClient}">
         <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" th:field="*{name}" required>
 
         <label for="mail">Почта:</label>
-        <input type="email" id="mail" name="mail" required>
-
-        <label for="telephone">Телефон:</label>
-        <input type="text" id="telephone" name="telephone" required>
+        <input type="email" id="mail" th:field="*{mail}" required>
 
         <label for="discount">Скидка:</label>
-        <input type="number" id="discount" name="discount" required>
+        <input type="number" id="discount" th:field="*{discount}" step="0.01" min="0" max="100">
 
         <button type="submit">Добавить клиента</button>
     </form>
 </section>
-<div>
-    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
-    <div>
-        <a th:if="${currentPage > 0}"
-           th:href="@{/admin/clients(page=${currentPage - 1}, name=${param.name}, email=${param.email}, minDiscount=${param.minDiscount}, maxDiscount=${param.maxDiscount})}">Назад</a>
 
-        <a th:if="${currentPage + 1 < totalPages}"
-           th:href="@{/admin/clients(page=${currentPage + 1}, name=${param.name}, email=${param.email}, minDiscount=${param.minDiscount}, maxDiscount=${param.maxDiscount})}">Вперёд</a>
+<div>
+    <span th:text="'Страница ' + (${currentPage} + 1) + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}" th:href="@{/admin/clients(page=${currentPage - 1})}">Назад</a>
+        <a th:if="${currentPage + 1 < totalPages}" th:href="@{/admin/clients(page=${currentPage + 1})}">Вперёд</a>
     </div>
 </div>
+
 </body>
 </html>

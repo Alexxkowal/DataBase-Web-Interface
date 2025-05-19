@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Управление заказами</h1>
+
+    <!-- Форма фильтрации -->
+    <form th:action="@{/admin/orders}" method="get">
+        <input type="number" name="orderId" placeholder="ID заказа" th:value="${param.orderId}">
+
+        <input type="text" name="status" placeholder="Статус" th:value="${param.status}">
+        <input type="number" name="minPrice" placeholder="Мин. цена" step="0.01" th:value="${param.minPrice}">
+        <input type="number" name="maxPrice" placeholder="Макс. цена" step="0.01" th:value="${param.maxPrice}">
+
+        <button type="submit">Поиск</button>
+    </form>
+
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список заказов</h2>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Статус</th>
+            <th>Официант</th>
+            <th>Стол</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders.content}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.status}"></td>
+            <td th:text="${order.waiter != null ? order.waiter.name : '—'}"></td>
+            <td th:text="${order.table != null ? order.table.id : '—'}"></td>
+            <td th:text="${order.price}"></td>
+            <td>
+                <a th:href="@{/admin/orders/{id}/edit(id=${order.id})}">Редактировать</a>
+                <a th:href="@{/admin/orders/{id}/delete(id=${order.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Добавить новый заказ</h3>
+    <form action="/admin/orders/add" method="post">
+        <label for="status">Статус:</label>
+        <input type="text" id="status" name="status" required>
+
+        <label for="price">Цена:</label>
+        <input type="number" id="price" name="price" step="0.01" min="0" required>
+
+        <label for="waiter.id">ID официанта:</label>
+        <input type="number" id="waiter.id" name="waiter.id">
+
+        <label for="table.id">ID стола:</label>
+        <input type="number" id="table.id" name="table.id">
+
+        <button type="submit">Добавить заказ</button>
+    </form>
+</section>
+
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/orders(page=${currentPage - 1}, status=${param.status}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Назад</a>
+
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/orders(page=${currentPage + 1}, status=${param.status}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice})}">Вперёд</a>
+    </div>
+</div>
+</body>
+</html>

@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DishCategorieRepository extends JpaRepository<DishCategorie, Integer> {
-    // Здесь можно добавить свои методы, если нужно
 }
-

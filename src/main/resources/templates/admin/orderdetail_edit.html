@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Редактировать деталь заказа</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<header>
+    <h1>Редактировать деталь заказа</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/orderdetails">Назад к деталям заказов</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <form th:action="@{/admin/orderdetails/{id}/update(id=${orderDetail.id})}" method="post">
+        <label for="orderId">ID заказа:</label>
+        <select id="orderId" name="order.id" required>
+            <option th:each="order : ${orders}" th:value="${order.id}"
+                    th:text="'Заказ #' + ${order.id}"
+                    th:selected="${order.id} == ${orderDetail.order.id}"></option>
+        </select>
+
+        <label for="dishId">Блюдо:</label>
+        <select id="dishId" name="dish.id" required>
+            <option th:each="dish : ${dishes}" th:value="${dish.id}" th:text="${dish.name}"
+                    th:selected="${dish.id} == ${orderDetail.dish.id}"></option>
+        </select>
+
+        <label for="quantity">Количество:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required th:value="${orderDetail.quantity}" />
+
+        <button type="submit">Сохранить</button>
+    </form>
+</section>
+</body>
+</html>

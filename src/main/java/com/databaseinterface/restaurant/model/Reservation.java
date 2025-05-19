@@ -24,7 +24,6 @@ public class Reservation {
     private TableModel table;
 
     @Column(name = "reservation_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationDate;
 
     @Column(name = "reservation_time", nullable = false)

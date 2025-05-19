@@ -5,55 +5,53 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "order_details")
 public class OrderDetail {
-    public OrderDetail() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column
-    private int orderId;
-    @Column
-    private int dishId;
-    @Column
-    private int quantity;
+    private Integer id;
 
-    public OrderDetail(int id, int orderId, int dishId, int quantity) {
-        this.id = id;
-        this.orderId = orderId;
-        this.dishId = dishId;
-        this.quantity = quantity;
-    }
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    public int getId() {
+    @ManyToOne
+    @JoinColumn(name = "dish_id", nullable = false)
+    private Dish dish;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
+    // геттеры и сеттеры
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public int getDishId() {
-        return dishId;
+    public Dish getDish() {
+        return dish;
     }
 
-    public void setDishId(int dishId) {
-        this.dishId = dishId;
+    public void setDish(Dish dish) {
+        this.dish = dish;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }
