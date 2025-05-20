@@ -16,6 +16,17 @@
 </header>
 
 <section>
+    <h2>Поиск составов</h2>
+    <form th:action="@{/admin/compounds}" method="get">
+        <input type="number" name="productId" placeholder="ID продукта" th:value="${param.productId}">
+        <input type="text" name="productName" placeholder="Название продукта" th:value="${param.productName}">
+        <input type="number" name="dishId" placeholder="ID блюда" th:value="${param.dishId}">
+        <input type="text" name="dishName" placeholder="Название блюда" th:value="${param.dishName}">
+        <input type="number" step="0.01" name="minQuantity" placeholder="Мин. количество" th:value="${param.minQuantity}">
+        <input type="number" step="0.01" name="maxQuantity" placeholder="Макс. количество" th:value="${param.maxQuantity}">
+
+        <button type="submit">Поиск</button>
+    </form>
     <h2>Список составов</h2>
     <table border="1">
         <thead>

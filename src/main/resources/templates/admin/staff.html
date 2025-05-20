@@ -84,6 +84,25 @@
 
         <button type="submit">Добавить сотрудника</button>
     </form>
+    <!-- Форма повышения зарплаты по должности -->
+    <h3>Повысить зарплату по должности</h3>
+    <form action="/admin/staff/increase-salary" method="post">
+        <label for="salaryPosition">Должность:</label>
+        <select id="salaryPosition" name="position" required>
+            <option value="" disabled selected>Выберите должность</option>
+            <option value="Бармен">Бармен</option>
+            <option value="Официант">Официант</option>
+            <option value="Уборщик">Уборщик</option>
+            <option value="Менеджер">Менеджер</option>
+            <option value="Повар">Повар</option>
+        </select>
+
+        <label for="percent">Процент повышения:</label>
+        <input type="number" id="percent" name="percent" step="0.01" min="0" required>
+        <span>%</span>
+
+        <button type="submit">Повысить зарплату</button>
+    </form>
 </section>
 
 <!-- Пагинация -->

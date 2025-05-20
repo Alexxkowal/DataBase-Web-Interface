@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StaffService {
@@ -18,4 +19,8 @@ public class StaffService {
         Pageable pageable = PageRequest.of(page, size);
         return staffRepository.searchStaff(name, position, minSalary, maxSalary, pageable);
     }
+    @Transactional
+    public void increaseSalaryByPosition(String position, Double percent) {
+    staffRepository.increaseSalaryByPosition(position, percent);
+}
 }

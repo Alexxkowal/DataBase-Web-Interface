@@ -27,29 +27,33 @@ public class CompoundService {
         this.dishService = dishService;
     }
 
-    public Page<Compound> findCompounds(int page, int size) {
-        Page<Compound> compounds = compoundRepository.findAll(PageRequest.of(page, size));
+    public Page<Compound> findCompoundsFiltered(int page, int size,
+                                            Integer productId,
+                                            String productName,
+                                            Integer dishId,
+                                            String dishName,
+                                            Double minQuantity,
+                                            Double maxQuantity) {
 
-        for (Compound c : compounds.getContent()) {
-            // Подгружаем название продукта
+    Page<Compound> compounds = compoundRepository.searchCompounds(
+            productId, productName, dishId, dishName, minQuantity, maxQuantity,
+            PageRequest.of(page, size));
+
+    // подгружаем имена, если нужно (на всякий случай, если в модели productName и dishName transient)
+    for (Compound c : compounds.getContent()) {
+        if (c.getProductName() == null || c.getProductName().isEmpty()) {
             Product product = productService.findById(c.getProductId());
-            if (product != null) {
-                c.setProductName(product.getName());  // предполагается метод getName()
-            } else {
-                c.setProductName("Не найдено");
-            }
-
-            // Подгружаем название блюда
-            Dish dish = dishService.findById(c.getDishId());
-            if (dish != null) {
-                c.setDishName(dish.getName());  // getName() у тебя в Dish — возвращает dishName
-            } else {
-                c.setDishName("Не найдено");
-            }
+            c.setProductName(product != null ? product.getName() : "Не найдено");
         }
-
-        return compounds;
+        if (c.getDishName() == null || c.getDishName().isEmpty()) {
+            Dish dish = dishService.findById(c.getDishId());
+            c.setDishName(dish != null ? dish.getName() : "Не найдено");
+        }
     }
+
+    return compounds;
+}
+
 
     public Compound findById(int id) {
         return compoundRepository.findById(id).orElse(null);

@@ -6,6 +6,7 @@ import com.databaseinterface.restaurant.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,6 +73,15 @@ public class StaffController {
     public String updateStaff(@PathVariable("id") int id, Staff staff) {
         staff.setId(id);
         staffRepository.save(staff);
+        return "redirect:/admin/staff";
+    }
+
+    @PostMapping("/increase-salary")
+    @Transactional
+    public String increaseSalary(
+            @RequestParam String position,
+            @RequestParam Double percent) {
+        staffService.increaseSalaryByPosition(position, percent);
         return "redirect:/admin/staff";
     }
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Меню ресторана</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { margin-bottom: 20px; }
+        form { margin-bottom: 20px; }
+
+        .dish-block {
+            margin-bottom: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .dish-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        ul.ingredients {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: blue;
+        }
+
+        .pagination span {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Меню</h1>
+
+<form method="get" th:action="@{/client/menu}">
+    <label for="filter">Фильтр по блюду:</label>
+    <input type="text" id="filter" name="filter" th:value="${filter}">
+    <button type="submit">Поиск</button>
+</form>
+
+<div th:each="entry : ${menuGrouped}">
+    <div class="dish-block">
+        <div class="dish-name" th:text="${entry.key}">Название блюда</div>
+        <ul class="ingredients">
+            <li th:each="item : ${entry.value}">
+                <span th:text="${item.productName}"></span> — <span th:text="${item.productQuantity}"></span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="pagination">
+    <a th:if="${hasPrevious}" th:href="@{/client/menu(page=${currentPage - 1}, filter=${filter})}">← Назад</a>
+    <span th:text="${currentPage + 1}">1</span>
+    <a th:if="${hasNext}" th:href="@{/client/menu(page=${currentPage + 1}, filter=${filter})}">Вперёд →</a>
+</div>
+
+</body>
+</html>

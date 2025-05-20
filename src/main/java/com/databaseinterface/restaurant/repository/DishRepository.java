@@ -28,4 +28,5 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
             @Param("maxPrice") Double maxPrice,
             @Param("category") Integer category,
             Pageable pageable);
+
 }

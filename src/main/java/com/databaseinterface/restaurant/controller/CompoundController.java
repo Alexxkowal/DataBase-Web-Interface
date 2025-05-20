@@ -20,16 +20,35 @@ public class CompoundController {
     }
 
     @GetMapping
-    public String listCompounds(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
-                                Model model) {
-        Page<Compound> compounds = compoundService.findCompounds(page, size);
-        model.addAttribute("compounds", compounds);
-        model.addAttribute("totalPages", compounds.getTotalPages());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("newCompound", new Compound());
-        return "admin/compounds";
-    }
+public String listCompounds(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(required = false) Integer productId,
+        @RequestParam(required = false) String productName,
+        @RequestParam(required = false) Integer dishId,
+        @RequestParam(required = false) String dishName,
+        @RequestParam(required = false) Double minQuantity,
+        @RequestParam(required = false) Double maxQuantity,
+        Model model) {
+
+    Page<Compound> compounds = compoundService.findCompoundsFiltered(
+        page, size, productId, productName, dishId, dishName, minQuantity, maxQuantity);
+
+    model.addAttribute("compounds", compounds);
+    model.addAttribute("totalPages", compounds.getTotalPages());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("newCompound", new Compound());
+
+    // для сохранения значений поиска в форме
+    model.addAttribute("productId", productId);
+    model.addAttribute("productName", productName);
+    model.addAttribute("dishId", dishId);
+    model.addAttribute("dishName", dishName);
+    model.addAttribute("minQuantity", minQuantity);
+    model.addAttribute("maxQuantity", maxQuantity);
+
+    return "admin/compounds";
+}
 
     @PostMapping("/add")
     public String addCompound(Compound compound) {
