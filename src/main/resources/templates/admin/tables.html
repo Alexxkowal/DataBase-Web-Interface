@@ -1,16 +1,74 @@
-<!-- admin/tables.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Столики</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Столы</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 <body>
-<h2>Список столиков</h2>
-<table border="1">
-    <tr><th>ID</th><th>Вместимость</th><th>Зона</th></tr>
-    <tr th:each="table : ${tables}">
-        <td th:text="${table.id}"></td>
-        <td th:text="${table.capacity}"></td>
-        <td th:text="${table.zone}"></td>
-    </tr>
-</table>
+<header>
+    <h1>Управление столами</h1>
+
+    <form th:action="@{/admin/tables}" method="get">
+        <input type="text" name="zone" placeholder="Зона" th:value="${param.zone}">
+        <input type="number" name="minCapacity" placeholder="Мин. вместимость" th:value="${param.minCapacity}">
+        <input type="number" name="maxCapacity" placeholder="Макс. вместимость" th:value="${param.maxCapacity}">
+        <button type="submit">Поиск</button>
+    </form>
+
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список столов</h2>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Вместимость</th>
+            <th>Зона</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="table : ${tables.content}">
+            <td th:text="${table.id}"></td>
+            <td th:text="${table.capacity}"></td>
+            <td th:text="${table.zone}"></td>
+            <td>
+                <a th:href="@{/admin/tables/{id}/edit(id=${table.id})}">Редактировать</a>
+                <a th:href="@{/admin/tables/{id}/delete(id=${table.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Добавить новый стол</h3>
+    <form action="/admin/tables/add" method="post">
+        <label for="capacity">Вместимость:</label>
+        <input type="number" id="capacity" name="capacity" min="1" required>
+
+        <label for="zone">Зона:</label>
+        <input type="text" id="zone" name="zone" maxlength="100" required>
+
+        <button type="submit">Добавить стол</button>
+    </form>
+</section>
+
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/tables(page=${currentPage - 1}, zone=${param.zone}, minCapacity=${param.minCapacity}, maxCapacity=${param.maxCapacity})}">Назад</a>
+
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/tables(page=${currentPage + 1}, zone=${param.zone}, minCapacity=${param.minCapacity}, maxCapacity=${param.maxCapacity})}">Вперёд</a>
+    </div>
+</div>
 </body>
 </html>

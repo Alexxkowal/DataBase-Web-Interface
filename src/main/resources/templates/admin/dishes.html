@@ -1,10 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Блюда</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+<header>
+    <h1>Управление блюдами</h1>
 
+    <form th:action="@{/admin/dishes}" method="get">
+        <input type="text" name="name" placeholder="Название блюда" th:value="${param.name}">
+        <input type="number" name="minPrice" placeholder="Мин. цена" step="0.01" th:value="${param.minPrice}">
+        <input type="number" name="maxPrice" placeholder="Макс. цена" step="0.01" th:value="${param.maxPrice}">
+        <input type="number" name="category" placeholder="Категория (ID)" th:value="${param.category}">
+
+        <button type="submit">Поиск</button>
+    </form>
+
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список блюд</h2>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Категория (ID)</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dish : ${dishes.content}">
+            <td th:text="${dish.id}"></td>
+            <td th:text="${dish.name}"></td>
+            <td th:text="${dish.price}"></td>
+            <td th:text="${dish.dishCategory}"></td>
+            <td>
+                <a th:href="@{/admin/dishes/{id}/edit(id=${dish.id})}">Редактировать</a>
+                <a th:href="@{/admin/dishes/{id}/delete(id=${dish.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Добавить новое блюдо</h3>
+    <form action="/admin/dishes/add" method="post">
+        <label for="dishName">Название:</label>
+        <input type="text" id="dishName" name="dishName" required>
+
+        <label for="price">Цена:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+
+        <label for="dishCategory">Категория (ID):</label>
+        <input type="number" id="dishCategory" name="dishCategory">
+
+        <button type="submit">Добавить блюдо</button>
+    </form>
+</section>
+
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/dishes(page=${currentPage - 1}, name=${param.name}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice}, category=${param.category})}">Назад</a>
+
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/dishes(page=${currentPage + 1}, name=${param.name}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice}, category=${param.category})}">Вперёд</a>
+    </div>
+</div>
 </body>
 </html>

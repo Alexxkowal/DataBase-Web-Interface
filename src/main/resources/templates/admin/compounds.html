@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Составы блюд</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Управление составами блюд</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Поиск составов</h2>
+    <form th:action="@{/admin/compounds}" method="get">
+        <input type="number" name="productId" placeholder="ID продукта" th:value="${param.productId}">
+        <input type="text" name="productName" placeholder="Название продукта" th:value="${param.productName}">
+        <input type="number" name="dishId" placeholder="ID блюда" th:value="${param.dishId}">
+        <input type="text" name="dishName" placeholder="Название блюда" th:value="${param.dishName}">
+        <input type="number" step="0.01" name="minQuantity" placeholder="Мин. количество" th:value="${param.minQuantity}">
+        <input type="number" step="0.01" name="maxQuantity" placeholder="Макс. количество" th:value="${param.maxQuantity}">
+
+        <button type="submit">Поиск</button>
+    </form>
+    <h2>Список составов</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID состава</th>
+            <th>ID продукта</th>
+            <th>Название продукта</th>
+            <th>ID блюда</th>
+            <th>Название блюда</th>
+            <th>Количество продукта</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="compound : ${compounds.content}">
+            <td th:text="${compound.id}"></td>
+            <td th:text="${compound.productId}"></td>
+            <td th:text="${compound.productName}"></td>
+            <td th:text="${compound.dishId}"></td>
+            <td th:text="${compound.dishName}"></td>
+            <td th:text="${compound.productQuantity}"></td>
+            <td>
+                <a th:href="@{/admin/compounds/{id}/edit(id=${compound.id})}">Редактировать</a>
+                <a th:href="@{/admin/compounds/{id}/delete(id=${compound.id})}"
+                   onclick="return confirm('Вы уверены, что хотите удалить?');">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Добавить новый состав</h3>
+    <form th:action="@{/admin/compounds/add}" method="post" th:object="${newCompound}">
+        <label for="productId">Продукт (ID):</label>
+        <input type="number" id="productId" th:field="*{productId}" required>
+
+        <label for="dishId">Блюдо (ID):</label>
+        <input type="number" id="dishId" th:field="*{dishId}" required>
+
+        <label for="productQuantity">Количество продукта:</label>
+        <input type="number" id="productQuantity" th:field="*{productQuantity}" step="0.01" required>
+
+        <button type="submit">Добавить состав</button>
+    </form>
+</section>
+
+<div>
+    <span th:text="'Страница ' + (${currentPage} + 1) + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/compounds(page=${currentPage - 1})}">Назад</a>
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/compounds(page=${currentPage + 1})}">Вперёд</a>
+    </div>
+</div>
+</body>
+</html>

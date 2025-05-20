@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование блюда</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Редактирование блюда</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/dishes">Блюда</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h2>Редактировать информацию о блюде</h2>
+<form th:action="@{/admin/dishes/{id}/update(id=${dish.id})}" th:object="${dish}" method="post">
+    <label for="dishName">Название:</label>
+    <input type="text" id="dishName" th:field="*{name}" required>
+
+    <label for="price">Цена:</label>
+    <input type="number" id="price" th:field="*{price}" step="0.01" required>
+
+    <label for="dishCategory">Категория (ID):</label>
+    <input type="number" id="dishCategory" th:field="*{dishCategory}">
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование сотрудника</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Редактирование сотрудника</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/staff">Сотрудники</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Форма редактирования сотрудника -->
+<h2>Редактировать информацию о сотруднике</h2>
+<form th:action="@{/admin/staff/{id}/update(id=${staff.id})}" th:object="${staff}" method="post">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <label for="position">Должность:</label>
+    <select id="position" th:field="*{position}" required>
+        <option value="Бармен">Бармен</option>
+        <option value="Официант">Официант</option>
+        <option value="Уборщик">Уборщик</option>
+        <option value="Менеджер">Менеджер</option>
+        <option value="Повар">Повар</option>
+    </select>
+
+    <label for="salary">Зарплата:</label>
+    <input type="number" id="salary" th:field="*{salary}" step="0.01" required>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+
+</body>
+</html>

@@ -5,28 +5,37 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "orders")
 public class Order {
-    public Order() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private String status;
-    @Column
-    private int waiterId;
-    @Column
-    private int tableId;
+
+    @Column(nullable = false)
+    private String status = "Принят";
+
+    @ManyToOne
+    @JoinColumn(name = "waiter_id")
+    private Staff waiter;
+
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private TableModel table;
+
     @Column
     private double price;
 
-    public Order(int id, String status, int waiterId, int tableId, double price) {
+    public Order() {
+    }
+
+    public Order(int id, String status, Staff waiter, TableModel table, double price) {
         this.id = id;
         this.status = status;
-        this.waiterId = waiterId;
-        this.tableId = tableId;
+        this.waiter = waiter;
+        this.table = table;
         this.price = price;
     }
+
+    // геттеры и сеттеры
 
     public int getId() {
         return id;
@@ -44,20 +53,20 @@ public class Order {
         this.status = status;
     }
 
-    public int getWaiterId() {
-        return waiterId;
+    public Staff getWaiter() {
+        return waiter;
     }
 
-    public void setWaiterId(int waiterId) {
-        this.waiterId = waiterId;
+    public void setWaiter(Staff waiter) {
+        this.waiter = waiter;
     }
 
-    public int getTableId() {
-        return tableId;
+    public TableModel getTable() {
+        return table;
     }
 
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
+    public void setTable(TableModel table) {
+        this.table = table;
     }
 
     public double getPrice() {

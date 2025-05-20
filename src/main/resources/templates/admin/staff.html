@@ -1,16 +1,121 @@
-<!-- admin/staff.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Сотрудники</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 <body>
-<h2>Список сотрудников</h2>
-<table border="1">
-    <tr><th>ID</th><th>Имя</th><th>Должность</th></tr>
-    <tr th:each="staff : ${staffList}">
-        <td th:text="${staff.id}"></td>
-        <td th:text="${staff.name}"></td>
-        <td th:text="${staff.position}"></td>
-    </tr>
-</table>
+<header>
+    <h1>Управление сотрудниками</h1>
+
+    <!-- Форма фильтрации -->
+    <form th:action="@{/admin/staff}" method="get">
+        <input type="text" name="name" placeholder="Имя" th:value="${param.name}">
+
+        <select name="position">
+            <option value="" th:selected="${param.position == null or param.position == ''}">--Все должности--</option>
+            <option th:value="'Бармен'" th:selected="${param.position == 'Бармен'}">Бармен</option>
+            <option th:value="'Официант'" th:selected="${param.position == 'Официант'}">Официант</option>
+            <option th:value="'Уборщик'" th:selected="${param.position == 'Уборщик'}">Уборщик</option>
+            <option th:value="'Менеджер'" th:selected="${param.position == 'Менеджер'}">Менеджер</option>
+            <option th:value="'Повар'" th:selected="${param.position == 'Повар'}">Повар</option>
+        </select>
+
+        <input type="number" name="minSalary" placeholder="Мин. зарплата" step="0.01" th:value="${param.minSalary}">
+        <input type="number" name="maxSalary" placeholder="Макс. зарплата" step="0.01" th:value="${param.maxSalary}">
+
+        <button type="submit">Поиск</button>
+    </form>
+
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список сотрудников</h2>
+
+    <!-- Таблица с сотрудниками -->
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Должность</th>
+            <th>Зарплата</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="staff : ${staffList.content}">
+            <td th:text="${staff.id}"></td>
+            <td th:text="${staff.name}"></td>
+            <td th:text="${staff.position}"></td>
+            <td th:text="${staff.salary}"></td>
+            <td>
+                <a th:href="@{/admin/staff/{id}/edit(id=${staff.id})}">Редактировать</a>
+                <a th:href="@{/admin/staff/{id}/delete(id=${staff.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Форма добавления нового сотрудника -->
+    <h3>Добавить нового сотрудника</h3>
+    <form action="/admin/staff/add" method="post">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="position">Должность:</label>
+        <select id="position" name="position" required>
+            <option value="" disabled selected>Выберите должность</option>
+            <option value="Бармен">Бармен</option>
+            <option value="Официант">Официант</option>
+            <option value="Уборщик">Уборщик</option>
+            <option value="Менеджер">Менеджер</option>
+            <option value="Повар">Повар</option>
+        </select>
+
+        <label for="salary">Зарплата:</label>
+        <input type="number" id="salary" name="salary" step="0.01" required>
+
+        <button type="submit">Добавить сотрудника</button>
+    </form>
+    <!-- Форма повышения зарплаты по должности -->
+    <h3>Повысить зарплату по должности</h3>
+    <form action="/admin/staff/increase-salary" method="post">
+        <label for="salaryPosition">Должность:</label>
+        <select id="salaryPosition" name="position" required>
+            <option value="" disabled selected>Выберите должность</option>
+            <option value="Бармен">Бармен</option>
+            <option value="Официант">Официант</option>
+            <option value="Уборщик">Уборщик</option>
+            <option value="Менеджер">Менеджер</option>
+            <option value="Повар">Повар</option>
+        </select>
+
+        <label for="percent">Процент повышения:</label>
+        <input type="number" id="percent" name="percent" step="0.01" min="0" required>
+        <span>%</span>
+
+        <button type="submit">Повысить зарплату</button>
+    </form>
+</section>
+
+<!-- Пагинация -->
+<div>
+    <span th:text="'Страница ' + (${currentPage} + 1) + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}"
+           th:href="@{/admin/staff(page=${currentPage - 1}, name=${param.name}, position=${param.position}, minSalary=${param.minSalary}, maxSalary=${param.maxSalary})}">Назад</a>
+
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/admin/staff(page=${currentPage + 1}, name=${param.name}, position=${param.position}, minSalary=${param.minSalary}, maxSalary=${param.maxSalary})}">Вперёд</a>
+    </div>
+</div>
+
 </body>
 </html>

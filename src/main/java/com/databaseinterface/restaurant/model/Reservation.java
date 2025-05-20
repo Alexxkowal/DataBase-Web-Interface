@@ -1,33 +1,42 @@
 package com.databaseinterface.restaurant.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "reservations")
 public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public Reservation() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
-    @Column
-    private int tableId;
-    @Column
-    private int clientId;
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "table_id", nullable = false)
+    private TableModel table;
+
+    @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
-    @Column
+
+    @Column(name = "reservation_time", nullable = false)
     private LocalTime reservationTime;
 
-    public Reservation(int id, int tableId, int clientId, LocalDate reservationDate, LocalTime reservationTime) {
+    // конструкторы, геттеры и сеттеры
+
+    public Reservation() {}
+
+    public Reservation(int id, Client client, TableModel table, LocalDate reservationDate, LocalTime reservationTime) {
         this.id = id;
-        this.tableId = tableId;
-        this.clientId = clientId;
+        this.client = client;
+        this.table = table;
         this.reservationDate = reservationDate;
         this.reservationTime = reservationTime;
     }
@@ -40,20 +49,20 @@ public class Reservation {
         this.id = id;
     }
 
-    public int getTableId() {
-        return tableId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public int getClientId() {
-        return clientId;
+    public TableModel getTable() {
+        return table;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setTable(TableModel table) {
+        this.table = table;
     }
 
     public LocalDate getReservationDate() {
@@ -72,3 +81,4 @@ public class Reservation {
         this.reservationTime = reservationTime;
     }
 }
+

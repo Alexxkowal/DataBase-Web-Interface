@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование продукта</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Редактирование продукта</h1>
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/products">Продукты</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Форма редактирования продукта -->
+<h2>Редактировать информацию о продукте</h2>
+<form th:action="@{/admin/products/{id}/update(id=${product.id})}" th:object="${product}" method="post">
+    <label for="name">Название:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <label for="type">Тип:</label>
+    <input type="text" id="type" th:field="*{type}" required>
+
+    <label for="pricePerUnit">Цена за единицу:</label>
+    <input type="number" id="pricePerUnit" th:field="*{pricePerUnit}" step="0.01" min="0.01" required>
+
+    <label for="calorieContent">Калорийность:</label>
+    <input type="number" id="calorieContent" th:field="*{calorieContent}" min="1" required>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление продуктами</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Управление продуктами</h1>
+
+    <!-- Навигация -->
+    <nav>
+        <ul>
+            <li><a href="/admin/adminMain">Главная</a></li>
+            <li><a href="/admin/products">Продукты</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Список продуктов</h2>
+
+    <!-- Форма фильтрации (если нужна, можно добавить фильтры) -->
+    <form th:action="@{/admin/products}" method="get">
+        <input type="text" name="name" placeholder="Название продукта" th:value="${param.name}">
+        <input type="text" name="type" placeholder="Тип продукта" th:value="${param.type}">
+        <button type="submit">Поиск</button>
+    </form>
+
+    <!-- Таблица с продуктами -->
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Тип</th>
+            <th>Цена за единицу</th>
+            <th>Калорийность</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products.content}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.type}"></td>
+            <td th:text="${product.pricePerUnit}"></td>
+            <td th:text="${product.calorieContent}"></td>
+            <td>
+                <a th:href="@{/admin/products/{id}/product_edit(id=${product.id})}">Редактировать</a>
+                <a th:href="@{/admin/products/{id}/delete(id=${product.id})}"
+                   onclick="return confirm('Вы уверены, что хотите удалить?');">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Форма для добавления нового продукта -->
+    <h3>Добавить новый продукт</h3>
+    <form th:action="@{/admin/products/add}" method="post" th:object="${newProduct}">
+        <label for="name">Название:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+
+        <label for="type">Тип:</label>
+        <input type="text" id="type" th:field="*{type}" required>
+
+        <label for="pricePerUnit">Цена за единицу:</label>
+        <input type="number" id="pricePerUnit" th:field="*{pricePerUnit}" step="0.01" min="0.01" required>
+
+        <label for="calorieContent">Калорийность:</label>
+        <input type="number" id="calorieContent" th:field="*{calorieContent}" min="1" required>
+
+        <button type="submit">Добавить продукт</button>
+    </form>
+</section>
+
+<!-- Пагинация -->
+<div>
+    <span th:text="'Страница ' + ${currentPage + 1} + ' из ' + ${totalPages}"></span>
+    <div>
+        <a th:if="${currentPage > 0}" th:href="@{/admin/products(page=${currentPage - 1}, name=${param.name}, type=${param.type})}">Назад</a>
+        <a th:if="${currentPage + 1 < totalPages}" th:href="@{/admin/products(page=${currentPage + 1}, name=${param.name}, type=${param.type})}">Вперёд</a>
+    </div>
+</div>
+
+</body>
+</html>
